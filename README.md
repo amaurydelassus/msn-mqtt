@@ -8,13 +8,14 @@ Le projet comprend un backend et un frontend avec les fonctionnalités suivantes
 
 ### Backend
 
-- Serveur Node JS / Broker MQTT
-- Gestion des Usernames (unique)
+- Serveur Mosquitto (Broker MQTT)
+- Gestion des Usernames
 - Gestion des canaux de discutions
 - Gestion des One to One
 
 ### Frontend
 
+- Gestion des Usernames (unique)
 - Application (msn like)
 - Login avec un username (unique)
 - Chat général pour discuter

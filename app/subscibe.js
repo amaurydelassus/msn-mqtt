@@ -8,20 +8,19 @@ let client = mqtt.connect({
 });
 
 client.on('connect', () => {
-    console.log(`Connected to Chat Server`);
+    console.log(`Log to Chat Server`);
     client.subscribe('chat');
-    client.subscribe('message');
+    client.subscribe('event');
 });
 
 client.on('message', (topic, message) => {
     try {
-        console.log("Sur le topic" + topic.toString() + ":")
+        console.log("Sur le topic " + topic.toString() + ":")
         console.log(message.toString());
     } catch (err) {
         console.log(`Failed to parse message: ${err.message}`);
     }
 });
-
 client.on('close', () => {
     console.log('Chat Server closed');
 });
