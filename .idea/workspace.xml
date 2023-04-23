@@ -5,13 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="39a4dbe9-a2cd-4d7d-8929-12419823d539" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/app/chat.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/privateChat.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/restartMosquitto.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/adduser.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/adduser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/subscibe.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/subscibe.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/chat.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mosquitto-conf/password_file.txt" beforeDir="false" afterPath="$PROJECT_DIR$/mosquitto-conf/password_file.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -91,7 +87,7 @@
       <workItem from="1681136755050" duration="9333000" />
       <workItem from="1682179530305" duration="4708000" />
       <workItem from="1682184866088" duration="9127000" />
-      <workItem from="1682238992716" duration="6510000" />
+      <workItem from="1682238992716" duration="11279000" />
     </task>
     <servers />
   </component>

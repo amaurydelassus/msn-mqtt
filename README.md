@@ -6,12 +6,16 @@ Ce projet a été réalisé dans le cadre des cours d'Internet des objets (IoT) 
 
 Le projet comprend un backend et un frontend avec les fonctionnalités suivantes :
 
+### Prérequis :
+- Avoir Node.js et Docker installés et fonctionnels sur votre machine.
+- Développé pour fonctionner sur Windows. (Cela peut ne pas fonctionner sur d'autres systèmes d'exploitation)
+
 ### Backend
 
-- Serveur Mosquitto (Broker MQTT)
-- Gestion des Usernames
-- Gestion des canaux de discutions
-- Gestion des One to One
+- Serveur mosquitto (Broker MQTT)
+- Gestion des Usernames par mosquitto (User/Password : fichier password_file.txt)
+- Gestion des canaux de discussion (topic)
+- Gestion des One to One (topic privée)
 
 ### Frontend
 
@@ -29,17 +33,35 @@ Il n’y a pas de mise en place de gestion de droits et de rétention (si on dé
 
 ## Comment utiliser
 
-Pour utiliser ce projet, vous devez d'abord installer les dépendances en exécutant la commande suivante :
-
+Pour utiliser ce projet, vous devez d'abord cloner ce projet.
+```
+git clone https://github.com/amaurydelassus/msn-mqtt.git
+```
+Puis dans un terminal situé dans le dossier cloné,
+```
+cd msn-mqtt
+```
+Lancez le serveur Mosquitto en utilisant Docker avec la commande suivante :
+```
+docker-compose up
+```
+Puis installez les dépendances avec la commande suivante :
 ```
 npm install
 ```
+Vous aurais besoin d'un utilisateur pour crée votre utilisateur utiliser la commande :
+```
+node .\app\adduser.js
+```
+Ou utiliser l'utilisateur de test (test/test): 
 
 Ensuite, vous pouvez lancer l'application avec la commande suivante :
+```
+node .\app\serveur.js
+```
+Entrez vos informations d'utilisateur/mot de passe et une fenêtre de discussion s'ouvrira.
 
-```
-npm install
-```
+
 
 ## TD
 

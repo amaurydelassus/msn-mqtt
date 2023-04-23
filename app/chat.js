@@ -1,7 +1,7 @@
 const mqtt = require('mqtt');
 const readline = require('readline');
-const { exec } = require('child_process');
-const { spawn } = require('child_process');
+const {exec} = require('child_process');
+const {spawn} = require('child_process');
 const rl = readline.createInterface({
     input: process.stdin,
     output: process.stdout,
@@ -11,8 +11,9 @@ const DISCONNECT_TOPIC = 'disconnect';
 const username = process.argv[2];
 const password = process.argv[3];
 
-chat(username,password)
-function chat(username,password){
+chat(username, password)
+
+function chat(username, password) {
     const client = mqtt.connect({
         port: 8883,
         host: '127.0.0.1',
@@ -21,16 +22,16 @@ function chat(username,password){
         password: password,
     });
     client.on('connect', () => {
-        console.log(`Connecté au serveur de chat en tant que ${username}`);
-        rl.setPrompt(`${username}: \n`);
-        client.subscribe('public');
+        // deconection des double compte
         client.publish(DISCONNECT_TOPIC, JSON.stringify({
             from: username,
             message: DISCONNECT_TOPIC,
             timestamp: new Date().getTime()
         }));
-        client.subscribe(`${username}/+`); // subscribe to one-to-one topic
         client.subscribe(DISCONNECT_TOPIC);
+        client.subscribe('public');
+        console.log(`Connecté au serveur de chat en tant que ${username}`);
+        client.subscribe(`${username}/+`); // subscribe to one-to-one topic
         client.publish('event', JSON.stringify({
             from: username,
             message: "Connexion",
@@ -86,7 +87,7 @@ function chat(username,password){
             }
         } else if (input.startsWith('@')) {
             const inputArr = input.split(' ');
-            const receiver = inputArr[0].slice(1); // Remove the '@' symbol from the receiver's username
+            const receiver = inputArr[0].slice(1);
             const message = inputArr.slice(1).join(' ');
             try {
                 client.publish(receiver + '/' + username, JSON.stringify({
@@ -94,6 +95,24 @@ function chat(username,password){
                     message: message,
                     timestamp: new Date().getTime()
                 }));
+            } catch (err) {
+                console.error(`Impossible de publier le message : ${err.message}`);
+            }
+        } else if (input.startsWith('#')) {
+            const inputArr = input.split(' ');
+            const topic = inputArr[0].slice(1);
+            const message = inputArr.slice(1).join(' ');
+            try {
+                client.subscribe(topic);
+                if(message == ""){
+                    console.log("Bienvenue dans le topic "+topic+"\nPour communiquer dans ce topic utiliser #"+topic+" Votre message pour le topic")
+                }else{
+                    client.publish(topic, JSON.stringify({
+                        from: username,
+                        message: message,
+                        timestamp: new Date().getTime()
+                    }));
+                }
             } catch (err) {
                 console.error(`Impossible de publier le message : ${err.message}`);
             }
