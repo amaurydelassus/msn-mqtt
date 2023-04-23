@@ -60,12 +60,46 @@ Ensuite, vous pouvez lancer l'application avec la commande suivante :
 node .\app\serveur.js
 ```
 Entrez vos informations d'utilisateur/mot de passe et une fenêtre de discussion s'ouvrira.
+Pour ouvrir dans la meme fenetre vous pouvez utiliser la comande : 
+```
+node .\app\chat.js username password
+```
+## Fonctionnement du chat
+### chat public
+- Pour envoyer un message public (Dans le topic public), il suffit de taper votre message et d'apuiller sur entrer.
+- L'affichage sera comme ceci :
+```
+public/<username> a dit : Votre message.
+```
+### Topic et Sous topic
+- Pour envoyer un message dans un topic il faut utiliser le '#NonDeVotreTopic>' Un nom de topic et en un seul mot:
 
+Exemple : 
+```
+#MonTopic Votre message
+```
+
+- Pour envoyer un message dans un sous topic il faut utiliser le '/NonDuSousTopic' pour chaque sous topic:
+
+Exemple :
+```
+#MonTopic/SousTopic Votre message
+```
+- Pour souscrire a un Topic ou sous topic utiliser les commandes si dessus sans le message (Si vous envoyer un message la souscription ce fait automatiquement)
+
+### One to One
+
+- Le one to one utilise le prefix @NomDuDestinataire
+
+Exemple : 
+```
+@DestinataireDuMessage Votre message
+```
 
 
 ## TD
 
-Ce projet a été développé dans le cadre d'un Travaux Dirigés et utilise les outils suivants :
+Ce projet a été développé dans le cadre d'un TP et utilise les outils suivants :
 
 - J'ai choisi Mosquitto car est un broker MQTT open source léger qui est facile à installer et à configurer. 
 - Il est idéal pour les projets de petite et moyenne taille avec une faible charge de trafic MQTT.
