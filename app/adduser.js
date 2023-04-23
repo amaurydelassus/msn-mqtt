@@ -18,6 +18,7 @@ rl.question('Enter username:', (username) => {
             }
             console.log(`User '${username}' added successfully`);
         });
+        exec(`docker-compose restart mosquitto`)
         rl.close();
     });
 });
