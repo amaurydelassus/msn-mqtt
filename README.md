@@ -8,28 +8,8 @@ Le projet comprend un backend et un frontend avec les fonctionnalités suivantes
 
 ### Prérequis :
 - Avoir Node.js et Docker installés et fonctionnels sur votre machine.
+- Jutilise Docker desktop pour windows : https://www.docker.com/products/docker-desktop/
 - Développé pour fonctionner sur Windows. (Cela peut ne pas fonctionner sur d'autres systèmes d'exploitation)
-
-### Backend
-
-- Serveur mosquitto (Broker MQTT)
-- Gestion des Usernames par mosquitto (User/Password : fichier password_file.txt)
-- Gestion des canaux de discussion (topic)
-- Gestion des One to One (topic privée)
-
-### Frontend
-
-- Gestion des Usernames (unique)
-- Application (msn like)
-- Login avec un username (unique)
-- Chat général pour discuter
-- Possibilité de créer un canal de discussion avec un nom
-- Inviter des utilisateurs dans un canal de discussion
-- Un utilisateur peut rejoindre un canal, quitter un canal et discuter dans un canal avec les autres utilisateurs du canal.
-- N’importe quel utilisateur peut créer un canal
-- Possibilité de discuter en one to one avec un autre utilisateur
-
-Il n’y a pas de mise en place de gestion de droits et de rétention (si on démarre l’application, les canaux sont vides, ainsi que les utilisateurs). Car ça n’est pas le but du TD.
 
 ## Comment utiliser
 
@@ -72,7 +52,7 @@ node .\app\chat.js username password
 public/<username> a dit : Votre message.
 ```
 ### Topic et Sous topic
-- Pour envoyer un message dans un topic il faut utiliser le '#NonDeVotreTopic>' Un nom de topic et en un seul mot:
+- Pour envoyer un message dans un topic il faut utiliser le '#NonDeVotreTopic>' suivi de votre message(Un nom de topic et en un seul mot):
 
 Exemple : 
 ```
@@ -87,6 +67,12 @@ Exemple :
 ```
 - Pour souscrire a un Topic ou sous topic utiliser les commandes si dessus sans le message (Si vous envoyer un message la souscription ce fait automatiquement)
 
+- Pour inviter une pessone dans un topic : 
+
+```
+@Destinataire #MonTopic/SousTopic
+```
+
 ### One to One
 
 - Le one to one utilise le prefix @NomDuDestinataire
@@ -95,8 +81,12 @@ Exemple :
 ```
 @DestinataireDuMessage Votre message
 ```
-
-
+### Quelle que comande
+- pour les commande utiliser le "/"
+```
+/cmd    : clear la console
+/users  : montre les users conecté au brocker mqtt
+```
 ## TD
 
 Ce projet a été développé dans le cadre d'un TP et utilise les outils suivants :
@@ -112,6 +102,25 @@ La solution sera notée sur 15 points avec la répartition suivante :
 - 3 points pour le fonctionnement en one to one
 - 4 points pour la gestion d’un canal de discussion (création, invitation, discussion, sortie)
 - 2 points pour la qualité du code
+
+### Backend
+
+- Serveur mosquitto (Broker MQTT)
+- Gestion des Usernames par mosquitto (User/Password : fichier password_file.txt)
+- Gestion des canaux de discussion (topic)
+- Gestion des One to One (topic privée)
+
+### Frontend
+
+- Application de chat (msn like)
+- Gestion des utilisateur -> connection avec login mots de passe
+- Chat public pour discuter
+- Possibilité de suivre, créer et quitter un canal (topic) de discussion avec un nom : grace a #
+- Possibilité de discuter en one to one avec un autre utilisateur grace au @
+- Inviter des utilisateurs dans un canal de discussion
+
+Il n’y a pas de mise en place de gestion de droits et de rétention (si on démarre l’application, les canaux sont vides, ainsi que les utilisateurs). Car ça n’est pas le but du TD.
+
 
 ## Auteur
 
