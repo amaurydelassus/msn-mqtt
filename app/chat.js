@@ -87,9 +87,12 @@ function chat(username, password) {
             from: username, message: "Reconnexion", timestamp: new Date().getTime()
         }));
     });
+    // Lorsque le client MQTT est déconnecté du broker, afficher un message dans la console
     client.on('offline', () => {
         console.log('Client MQTT déconnecté du broker');
     });
+
+    // En cas d'erreur, afficher un message dans la console et fermer la connexion MQTT et l'interface utilisateur si nécessaire
     client.on('error', (err) => {
         if (err.message === 'Connection refused: Not authorized') {
             console.error(`Connection error: ${err.message}.\nDéconnexion...`);
@@ -101,16 +104,25 @@ function chat(username, password) {
             console.error(`${err}`);
         }
     });
+
+    // Lorsque le serveur de chat est fermé, afficher un message dans la console
     client.on('close', () => {
         console.log('Le serveur de chat est fermé');
     });
+
+    // Lorsqu'un message est reçu, traiter le message en fonction du topic
     client.on('message', (topic, message) => {
         try {
+            // Convertir le message en objet JSON
             message = JSON.parse(message.toString())
+
+            // Si le message reçu indique déconnexion de l'utilisateur, afficher un message dans la console et fermer la connexion MQTT
             if (topic === DISCONNECT_TOPIC && message.from === username) {
                 console.log("Connexion via un autre compte. Vous allez être déconnecté.");
                 client.end();
             }
+
+            // Gestion de la liste des utilisateur.
             if (topic === USERS_TOPIC) {
                 connectedClients.push(message.from);
                 connectedClients = enleverDoublons(connectedClients)
@@ -121,26 +133,30 @@ function chat(username, password) {
                     }));
                 }
             }
-            if (topic !== DISCONNECT_TOPIC && topic !== USERS_TOPIC) {// Pour ne pas afficher les message de l'utilisateur && message.from !== username){
+
+            if (topic !== DISCONNECT_TOPIC && topic !== USERS_TOPIC) {
                 if (message.message.startsWith('#')) {
+                    // Gestion des invitations
                     const inputArr = message.message.split(' ');
                     const topics = inputArr[0].slice(1);
                     try {
                         if (username != message.from) {
+                            //Ajoute l'utilisateur invité au topic correspondant
                             client.subscribe(topics);
                             console.log("Bienvenue dans le topic " + topics + "\n" +
                                 "Vous avez été ajouté par " + message.from + "\n" +
                                 "Pour communiquer dans ce topic utiliser #" + topics + " Votre message\n" +
                                 "Pour quitter le topic #" + topics + " exit")
                         } else {
+                            //Ajoute l'utilisateur au topic correspondant, et confirme l'invitation
                             client.subscribe(topics);
                             console.log("L'utilisateur a bien été ajouté au topic #" + topics)
                         }
-
                     } catch (err) {
                         console.error(`Impossible d'ajouter l'utilisateur au Topic`);
                     }
                 } else {
+                    // Afficher le message reçu dans la console
                     console.log(topic + '/' + message.from + ' a dit : ' + message.message);
                 }
             }
@@ -193,7 +209,7 @@ function chat(username, password) {
             } catch (err) {
                 console.error(`Impossible de publier le message : ${err.message}`);
             }
-        } else if (input.startsWith('/')) { // Partie Topic
+        } else if (input.startsWith('/')) { // Partie Commande
             const inputArr = input.split(' ');
             const cmd = inputArr[0].slice(1);
             if (cmd == 'cls') {
@@ -204,6 +220,7 @@ function chat(username, password) {
             }
         } else {
             try {
+                // Envoie du message public
                 client.publish(PUBLIC_TOPIC, JSON.stringify({
                     from: username, message: input, timestamp: new Date().getTime()
                 }));

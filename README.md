@@ -26,7 +26,7 @@ docker-compose up
 
 Si vous avez une erreur, cela peut être dû à l'utilisation du port 8883 ou votre connexion Internet.
 
-Puis installez les dépendances avec la commande suivante :
+Puis dans un autre terminal installez les dépendances avec la commande suivante :
 ```
 npm install
 ```

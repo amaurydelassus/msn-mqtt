@@ -5,14 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="39a4dbe9-a2cd-4d7d-8929-12419823d539" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/img.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/chat.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/chat.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/privateChat.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/privateChat.js.old" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/subscibe.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/allLog.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/mosquitto-conf/password_file.txt" beforeDir="false" afterPath="$PROJECT_DIR$/mosquitto-conf/password_file.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -94,7 +89,7 @@
       <workItem from="1682238992716" duration="14600000" />
       <workItem from="1682266655607" duration="3579000" />
       <workItem from="1682450812292" duration="17028000" />
-      <workItem from="1682525085976" duration="2035000" />
+      <workItem from="1682525085976" duration="4764000" />
     </task>
     <servers />
   </component>
