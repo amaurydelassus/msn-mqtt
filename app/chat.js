@@ -1,42 +1,65 @@
 const mqtt = require('mqtt');
 const readline = require('readline');
-const {spawn} = require('child_process');
+const { spawn } = require('child_process');
 
+// création de l'interface de lecture pour l'entrée utilisateur
 const rl = readline.createInterface({
-    input: process.stdin, output: process.stdout,
+    input: process.stdin,
+    output: process.stdout,
 });
-const DISCONNECT_TOPIC = 'disconnect';
-const USERS_TOPIC = 'users';
 
+// constantes
+const DISCONNECT_TOPIC = 'disconnect'; // topic pour la déconnexion
+const USERS_TOPIC = 'users'; // topic pour la liste des utilisateurs
+const PUBLIC_TOPIC = 'Général'; // topic public
+
+// récupération du nom d'utilisateur et du mot de passe passés en argument
 const username = process.argv[2];
 const password = process.argv[3];
 
-var connectedClients = [];
+// tableau des clients connectés
+let connectedClients = [];
 
-chat(username, password)
+// appel de la fonction de chat avec les paramètres utilisateur
+chat(username, password);
 
+// fonction de chat
 function chat(username, password) {
+    // création du client MQTT
     const client = mqtt.connect({
-        port: 8883, host: '127.0.0.1', keepalive: 10000, username: username, password: password,
+        port: 8883,
+        host: '127.0.0.1',
+        keepalive: 10000,
+        username: username,
+        password: password,
     });
+
+    // événement de connexion au broker MQTT
     client.on('connect', () => {
-        // deconection des double compte
+        // déconnexion des comptes en double
         client.publish(DISCONNECT_TOPIC, JSON.stringify({
-            from: username, message: DISCONNECT_TOPIC, timestamp: new Date().getTime()
+            from: username,
+            message: DISCONNECT_TOPIC,
+            timestamp: new Date().getTime(),
         }));
-        client.subscribe(DISCONNECT_TOPIC);
-        client.subscribe(USERS_TOPIC); // subscribe to users topic
+
+        // abonnement aux topics
+        client.subscribe(DISCONNECT_TOPIC); // déconnexion
+        client.subscribe(USERS_TOPIC); // liste des utilisateurs
+        client.subscribe(PUBLIC_TOPIC); // topic général
+        client.subscribe(`${username}/+`); // topic privé (recevoir)
+        client.subscribe(`+/${username}`); // topic privé (envoyer)
+
+        // envoi d'un message de connexion
         client.publish(USERS_TOPIC, JSON.stringify({
-            from: username, message: "Connexion", timestamp: new Date().getTime()
+            from: username,
+            message: "Connexion",
+            timestamp: new Date().getTime(),
         }));
-        client.subscribe('Général');
-        client.subscribe(`${username}/+`); // subscribe to one-to-one topic receive
-        client.subscribe(`+/${username}`); // subscribe to one-to-one topic send
-        client.publish('event', JSON.stringify({
-            from: username, message: "Connexion", timestamp: new Date().getTime()
-        }));
+
+        // affichage des commandes disponibles
         console.log("*****************************************************************\n" +
-            "*                 Bienvenu sur le chat                          *\n" +
+            "*                 Bienvenue sur le chat                          *\n" +
             "*****************************************************************\n" +
             "*       Pour parler en public : saisissez votre message         *\n" +
             "*       Pour créer un topic : #NomDuTopic                       *\n" +
@@ -45,6 +68,8 @@ function chat(username, password) {
             "*       #NomDuTopic Votre message...                            *\n" +
             "*       Pour inviter une personne à un topic :                  *\n" +
             "*       @NomDeLaPersonne #NomDuTopic/NomDuSousTopic...          *\n" +
+            "*       Pour quitter un topic :                                 *\n" +
+            "*       #NomDuTopic/NomDuSousTopic... exit                      *\n" +
             "*       Pour parler en privé avec une personne :                *\n" +
             "*       @NomDeLaPersonne Votre message...                       *\n" +
             "*       Commandes disponibles :                                 *\n" +
@@ -53,6 +78,8 @@ function chat(username, password) {
             "*****************************************************************\n");
         console.log(`Connecté au serveur de chat en tant que ${username}`);
     });
+
+    // événement de reconnexion au broker MQTT
     client.on('reconnect', () => {
         console.log(`Reconnexion en cours...`);
         client.unsubscribe(DISCONNECT_TOPIC)
@@ -66,8 +93,8 @@ function chat(username, password) {
     client.on('error', (err) => {
         if (err.message === 'Connection refused: Not authorized') {
             console.error(`Connection error: ${err.message}.\nDéconnexion...`);
-            client.end();
-            rl.close();
+            client.end(); // fermer la connexion MQTT
+            rl.close(); // fermer l'interface utilisateur
         } else if (err.message === 'Error: client disconnecting') {
             console.error('Déconnexion...');
         } else {
@@ -97,42 +124,21 @@ function chat(username, password) {
             if (topic !== DISCONNECT_TOPIC && topic !== USERS_TOPIC) {// Pour ne pas afficher les message de l'utilisateur && message.from !== username){
                 if (message.message.startsWith('#')) {
                     const inputArr = message.message.split(' ');
-                    const topic = inputArr[0].slice(1);
+                    const topics = inputArr[0].slice(1);
                     try {
                         if (username != message.from) {
-                            client.subscribe(topic);
-                            console.log("Bienvenue dans le topic " + topic + "\n" +
+                            client.subscribe(topics);
+                            console.log("Bienvenue dans le topic " + topics + "\n" +
                                 "Vous avez été ajouté par " + message.from + "\n" +
-                                "Pour communiquer dans ce topic utiliser #" + topic + " Votre message\n" +
-                                "Pour quitter le topic #" + topic + " exit")
+                                "Pour communiquer dans ce topic utiliser #" + topics + " Votre message\n" +
+                                "Pour quitter le topic #" + topics + " exit")
                         } else {
-                            client.subscribe(topic);
-                            console.log("L'utilisateur a bien été ajouté au topic #" + topic)
+                            client.subscribe(topics);
+                            console.log("L'utilisateur a bien été ajouté au topic #" + topics)
                         }
 
                     } catch (err) {
                         console.error(`Impossible d'ajouter l'utilisateur au Topic`);
-                    }
-                }
-            }
-            if (topic !== DISCONNECT_TOPIC && topic !== USERS_TOPIC) {// Pour ne pas afficher les message de l'utilisateur && message.from !== username){
-                if (message.message.startsWith('#')) {
-                    const inputArr = message.message.split(' ');
-                    const topic = inputArr[0].slice(1);
-                    try {
-                        if (username != message.from) {
-                            client.subscribe(topic);
-                            console.log("Bienvenue dans le topic " + topic + "\n" +
-                                "Vous avez été ajouté par " + message.from + "\n" +
-                                "Pour communiquer dans ce topic utiliser #" + topic + " Votre message\n" +
-                                "Pour quitter le topic #" + topic + " exit")
-                        } else {
-                            client.subscribe(topic);
-                            console.log("L'utilisateur a bien été ajouté au topic #" + topic)
-                        }
-
-                    } catch (err) {
-                        console.error(`Impossible de publier le message : ${err.message}`);
                     }
                 } else {
                     console.log(topic + '/' + message.from + ' a dit : ' + message.message);
@@ -198,7 +204,7 @@ function chat(username, password) {
             }
         } else {
             try {
-                client.publish('Général', JSON.stringify({
+                client.publish(PUBLIC_TOPIC, JSON.stringify({
                     from: username, message: input, timestamp: new Date().getTime()
                 }));
             } catch (err) {
@@ -208,6 +214,7 @@ function chat(username, password) {
     });
 }
 
+// fonction pour enlever les doublons dans un tableau
 function enleverDoublons(tab) {
     return tab.filter((item, index) => tab.indexOf(item) === index);
 }
