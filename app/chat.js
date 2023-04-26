@@ -1,6 +1,6 @@
 const mqtt = require('mqtt');
 const readline = require('readline');
-const { spawn } = require('child_process');
+const {spawn} = require('child_process');
 
 // création de l'interface de lecture pour l'entrée utilisateur
 const rl = readline.createInterface({
@@ -76,7 +76,7 @@ function chat(username, password) {
             "*       /users : affiche la liste des utilisateurs              *\n" +
             "*       /cls : nettoie la console                               *\n" +
             "*****************************************************************\n");
-        console.log(`Connecté au serveur de chat en tant que ${username}`);
+        console.log(`Connecté au serveur de chat en tant que ${username} .\nFaite un /users pour voir les clients connecté`);
     });
 
     // événement de reconnexion au broker MQTT

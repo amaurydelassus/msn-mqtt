@@ -9,8 +9,7 @@ let client = mqtt.connect({
 
 client.on('connect', () => {
     console.log(`Log to Chat Server`);
-    client.subscribe('chat');
-    client.subscribe('event');
+    client.subscribe('#');
 });
 
 client.on('message', (topic, message) => {
