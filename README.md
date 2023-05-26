@@ -38,7 +38,7 @@ Ou utiliser l'utilisateur de test (test/test) ou/et amaury (amaury/amaury):
 
 Ensuite, vous pouvez lancer l'application avec la commande suivante :
 ```
-node .\app\serveur.js
+node .\app\server.js
 ```
 Entrez vos informations d'utilisateur/mot de passe et une fenêtre de discussion s'ouvrira.
 
